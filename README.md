@@ -4,4 +4,4 @@
     docker-compose up
 
 ##### Acesso à aplicação
-    http://localhost:4200/app-cadastral
+    http://localhost:4200
