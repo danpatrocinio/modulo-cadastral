@@ -1,0 +1,127 @@
+<div class="top-view">
+    <div style="margin-top: 30px; margin-bottom: 20px;">
+        <h3 style="text-align: left">{{tituloApp}}</h3>
+    </div>
+    <form class="form-row">
+        <div class="col">
+            <button ng-click="pessoa = {}" type="button" class="btn btn-info my-8 my-sm-2" data-toggle="modal" data-target="#pessoaModal">
+                + Pessoa
+            </button>
+        </div>
+        <div class="col"></div>
+        <div class="col">
+            <input ng-model="criterioDeBusca" class="form-control my-8 my-sm-2" type="text" placeholder="Busca rápida" aria-label="Busca">
+        </div>
+    </form>
+    <br>
+    <div class="alert-danger">{{mensagemDeErro}}</div>
+    <table class="table table-striped table-sm" ng-show="pessoas.length">
+        <thead>
+            <th><a href="" ng-click="ordenarPor('nome')">Nome</a> </th>
+            <th><a href="" ng-click="ordenarPor('cpf')">CPF</a></th>
+            <th><a href="" ng-click="ordenarPor('dataNascimento')">Data de nascimento</a></th>
+            <th><a href="" ng-click="ordenarPor('email')">E-mail</a></th>
+            <th></th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="elemento in pessoas | filter:criterioDeBusca | orderBy:campoParaOrdenacao:direcaoDaOrdenacao">
+                <td title="{{elemento.nome}}">{{elemento.nome}}</td>
+                <td>{{elemento.cpf | cpf}}</td>
+                <td>{{elemento.dataNascimento | date:'dd/MM/yyyy'}}</td>
+                <td>{{elemento.email}}</td>
+                <td style="text-align: right;">
+                    <a href="" ng-click="editarPessoa(elemento)"><span style="padding: 3px;" title="Editar pessoa" class="fa fa-pencil" data-toggle="modal" data-target="#pessoaModal"></span></a>
+                    <a href="" ng-click="removerPessoa(elemento)"><span style="padding: 3px;" title="Remover pessoa" class="fa fa-trash"></span></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <h5 style="text-align: center" ng-show="!pessoas.length">Não existem pessoas a serem demonstradas. Clique em '+ Pessoa' para adicionar!</h5>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="pessoaModal" tabindex="-1" role="dialog" aria-labelledby="pessoaModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pessoaModalLabel">{{!pessoa.id ? 'Nova pessoa' : 'Editando pessoa'}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="pessoaForm" name="pessoaForm">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="nome">Nome(*): </label>
+                                <input ng-model="pessoa.nome" ng-required="true" ng-minlength="2" class="form-control" type="text" name="nome" id="nome" placeholder="Nome">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="cpf">CPF(*): </label>
+                                <input ng-model="pessoa.cpf" ng-required="true" ng-minlength="11" ng-maxlength="15" class="form-control" type="text" name="cpf" id="cpf" placeholder="CPF" cpf-dir>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="dataNascimento">Data de nascimento(*):</label>
+                                <input ng-model="pessoa.dataNascimento" type="date" name="dataNascimento" id="dataNascimento" ng-required="true" class="form-control">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="sexo">Sexo:</label>
+                                <select id="sexo" class="custom-select" ng-model="pessoa.sexo">
+                                    <option value="">Selecione</option>
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Feminino</option>
+                                    <option value="O">Outro</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="naturalidade">Naturalidade: </label>
+                                <input ng-model="pessoa.naturalidade" type="text" ng-minlength="2" class="form-control" type="text" name="naturalidade" id="naturalidade" placeholder="Naturalidade">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="nacionalidade">Nacionalidade: </label>
+                                <input ng-model="pessoa.nacionalidade" type="text" ng-minlength="2" class="form-control" type="text" name="nacionalidade" id="nacionalidade" placeholder="Nacionalidade">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="email">E-mail: </label>
+                                <input ng-model="pessoa.email" type="text" ng-minlength="2" class="form-control" type="text" name="email" id="email" placeholder="E-mail">
+                            </div>
+                        </div>
+                        <small>(*) campos obrigatórios</small>
+                    </form>
+                    <div ng-messages="pessoaForm.nome.$error" ng-show="pessoaForm.nome.$dirty">
+                        <div ng-message="required" class="alert alert-danger">
+                            Informe o nome!
+                        </div>
+                    </div>
+                    <div ng-messages="pessoaForm.cpf.$error" ng-show="pessoaForm.cpf.$dirty">
+                        <div ng-message="required" class="alert alert-danger">
+                            Informe o CPF!
+                        </div>
+                    </div>
+                    <div ng-messages="pessoaForm.dataNascimento.$error" ng-show="pessoaForm.dataNascimento.$dirty">
+                        <div ng-message="required" class="alert alert-danger">
+                            Informe a data de nascimento!
+                        </div>
+                    </div>
+                    <div ng-messages="pessoaForm.sexo.$error" ng-show="pessoaForm.sexo.$dirty">
+                        <div ng-message="required" class="alert alert-danger">
+                            Informe o sexo da pessoa!
+                        </div>
+                    </div>
+                    <div ng-messages="pessoaForm.email.$error" ng-show="pessoaForm.email.$dirty">
+                        <div ng-message="required" class="alert alert-danger">
+                            Informe o e-mail!
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="adicionarPessoa(pessoa)" ng-disabled="pessoaForm.$invalid" data-dismiss="modal">Salvar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,95 @@
+<div class="top-view">
+    <div style="margin-top: 30px; margin-bottom: 20px;">
+        <h3 style="text-align: left">{{tituloApp}}</h3>
+    </div>
+    <form class="form-row">
+        <div class="col">
+            <button ng-click="usuario = {}" type="button" class="btn btn-info my-8 my-sm-2" data-toggle="modal" data-target="#usuarioModal">
+                + Usuário
+            </button>
+        </div>
+        <div class="col"></div>
+        <div class="col">
+            <input ng-model="criterioDeBusca" class="form-control my-8 my-sm-2" type="text" placeholder="Busca rápida" aria-label="Busca">
+        </div>
+    </form>
+    <br>
+    <div class="alert-danger">{{mensagemDeErro}}</div>
+    <table class="table table-striped table-sm" ng-show="usuarios.length">
+        <thead>
+            <th><a href="" ng-click="ordenarPor('username')">User name</a> </th>
+            <th><a href="" ng-click="ordenarPor('nome')">Nome</a></th>
+            <th></th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="elemento in usuarios | filter:criterioDeBusca | orderBy:campoParaOrdenacao:direcaoDaOrdenacao">
+                <td title="{{elemento.username}}">{{elemento.username}}</td>
+                <td>{{elemento.nome}}</td>
+                <td style="text-align: right;">
+                    <a href="" ng-click="editarUsuario(elemento)" ng-hide="elemento.username === 'admin'"><span style="padding: 3px;" title="Editar usuario" class="fa fa-pencil" data-toggle="modal" data-target="#usuarioModal"></span></a>
+                    <a href="" ng-click="removerUsuario(elemento)" ng-hide="elemento.username === 'admin'"><span style="padding: 3px;" title="Remover usuario" class="fa fa-trash"></span></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <h5 style="text-align: center" ng-show="!usuarios.length">Não existem usuários a serem demonstrados. Clique em '+ Usuário' para adicionar!</h5>
+    
+       <!-- Modal -->
+       <div class="modal fade" id="usuarioModal" tabindex="-1" role="dialog" aria-labelledby="usuarioModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="usuarioModalLabel">{{!usuario.id ? 'Nova usuário' : 'Editando usuário'}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="usuarioForm" name="usuarioForm">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="nome">Username: </label>
+                                <input ng-model="usuario.username" ng-required="true" ng-minlength="2" class="form-control" type="text" name="nome" id="nome" placeholder="Username">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="nome">Nome(*): </label>
+                                <input ng-model="usuario.nome" ng-required="true" ng-minlength="2" ng-maxlength="20" class="form-control" type="text" name="nome" id="nome" placeholder="Nome">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="nome">Senha(*): </label>
+                                <input ng-model="usuario.senha" ng-required="true" ng-minlength="6" ng-maxlength="8" class="form-control" type="text" name="senha" id="senha" placeholder="Senha">
+                            </div>
+                        </div>
+                        <small>(*) campos obrigatórios</small>
+                    </form>
+                    <div ng-messages="usuarioForm.nome.$error" ng-show="usuarioForm.nome.$dirty">
+                        <div ng-message="required" class="alert alert-danger">
+                            Informe o nome!
+                        </div>
+                    </div>
+                    <div ng-messages="usuarioForm.username.$error" ng-show="usuarioForm.username.$dirty">
+                        <div ng-message="required" class="alert alert-danger">
+                            Informe o username!
+                        </div>
+                    </div>
+                    <div ng-messages="usuarioForm.senha.$error" ng-show="usuarioForm.senha.$dirty">
+                        <div ng-message="required" class="alert alert-danger">
+                            Informe a senha da usuário!
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="adicionarUsuario(usuario)" ng-disabled="usuarioForm.$invalid" data-dismiss="modal">Salvar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

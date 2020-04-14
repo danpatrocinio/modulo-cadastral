@@ -7,7 +7,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./api-cadastral/target/api-cadastral.jar:/api-cadastral.jar
+      - ./backend/target/api-cadastral.jar:/api-cadastral.jar
     command: ["java", "-jar", "api-cadastral.jar"]
     networks:
       - backendNetwork
@@ -22,7 +22,7 @@ services:
       - springapi
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./app-cadastral/:/usr/share/nginx/html
+      - ./frontend/:/usr/share/nginx/html
     networks:
       - frontendNetwork
     
